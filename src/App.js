@@ -17,7 +17,7 @@ function App() {
       try {
         const response = await openai.createCompletion({
           model: "gpt-3.5-turbo",
-          prompt: prompt,
+          messages: [{role: "user", content: prompt}], 
           temperature: 0.7,
           max_tokens: 512,
           top_p: 1,
