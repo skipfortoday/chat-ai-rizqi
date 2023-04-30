@@ -7,6 +7,10 @@ function App() {
   });
   const openai = new OpenAIApi(configuration);
 
+  const [prompt, setPrompt] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [chats, setChats] = useState([]);
+
   console.log(prompt, chats);
 
   const callbackChat = useCallback(() => {
