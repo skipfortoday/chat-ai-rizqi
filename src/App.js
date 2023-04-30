@@ -7,9 +7,7 @@ function App() {
   });
   const openai = new OpenAIApi(configuration);
 
-  const [prompt, setPrompt] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [chats, setChats] = useState([]);
+  console.log(prompt, chats);
 
   const callbackChat = useCallback(() => {
     const handleClick = async () => {
@@ -17,7 +15,7 @@ function App() {
       try {
         const response = await openai.createChatCompletion({
           model: "gpt-3.5-turbo",
-          messages: [{role: "user", content: prompt}], 
+          messages: chats, 
           temperature: 0.7,
           max_tokens: 512,
           top_p: 1,
@@ -29,8 +27,8 @@ function App() {
         setChats([
           ...chats,
           {
-            type: "bot",
-            value: response?.data?.choices[0]?.text,
+            role: "assistant",
+            content: response?.data?.choices[0]?.message?.content,
           },
         ]);
          setLoading(false);
@@ -46,8 +44,8 @@ function App() {
     setChats([
       ...chats,
       {
-        value: text,
-        type: "user",
+        content: text,
+        role: "user",
       },
     ]);
   };
@@ -56,7 +54,7 @@ function App() {
     if (
       chats.length > 0 &&
       !loading &&
-      chats[chats.length - 1]?.type === "user"
+      chats[chats.length - 1]?.role === "user"
     ) {
       callbackChat();
     }
@@ -84,16 +82,16 @@ function App() {
                 {reverse?.map((chat, key) => {
                   return (
                     <div key={key}>
-                      {chat.type === "user" ? (
+                      {chat.role === "user" ? (
                         <div className="chat chat-end">
                           <div className="chat-bubble chat-bubble-secondary">
-                            {chat?.value}
+                            {chat?.content}
                           </div>
                         </div>
                       ) : (
                         <div className="chat chat-start">
                           <div className="chat-bubble chat-bubble-success">
-                            {chat?.value}
+                            {chat?.content}
                           </div>
                         </div>
                       )}
