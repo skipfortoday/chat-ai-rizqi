@@ -33,10 +33,10 @@ function App() {
             value: response?.data?.choices[0]?.text,
           },
         ]);
+         setLoading(false);
       } catch (error) {
         console.error(error);
       }
-      setLoading(false);
     };
 
     handleClick();
